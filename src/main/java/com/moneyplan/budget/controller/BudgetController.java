@@ -23,7 +23,7 @@ public class BudgetController {
     private final BudgetService budgetService;
 
     @PostMapping("/")
-    @Operation(summary = "예산 설정", description = "기간별 예산을 설정합니다.")
+    @Operation(summary = "예산 설정", description = "기간별 예산을 설정합니다. 예산당 카테고리는 필수로 지정해야 합니다.")
     public ResponseEntity<List<BudgetCreateRes>> createBudget(@RequestBody BudgetCreateReq req) {
         List<BudgetCreateRes> res = budgetService.createBudget(req);
         return ResponseEntity.ok(res);
