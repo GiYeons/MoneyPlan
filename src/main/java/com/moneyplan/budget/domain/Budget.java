@@ -10,11 +10,15 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Budget {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,11 +33,21 @@ public class Budget {
     private Category category;
 
     @Column(nullable = false)
-    private LocalDateTime period_start;
+    private LocalDate startDate;
 
     @Column(nullable = false)
-    private LocalDateTime period_end;
+    private LocalDate endDate;
 
     @Column(nullable = false)
     private int amount;
+
+    @Builder
+    public Budget(Member member, Category category, LocalDate startDate, LocalDate endDate,
+        int amount) {
+        this.member = member;
+        this.category = category;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.amount = amount;
+    }
 }
