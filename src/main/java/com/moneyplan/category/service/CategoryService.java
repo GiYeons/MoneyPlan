@@ -25,7 +25,7 @@ public class CategoryService {
             throw new BusinessException(ErrorCode.CATEGORY_NOT_FOUND);
         }
         return categories.stream()
-            .map(category -> new CategoryRes(category.getName()))
+            .map(category -> CategoryRes.of(category))
             .toList();
     }
 }
