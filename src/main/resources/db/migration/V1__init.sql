@@ -22,8 +22,8 @@ CREATE TABLE IF NOT EXISTS category
 CREATE TABLE IF NOT EXISTS budget
 (
     id          BIGINT auto_increment PRIMARY KEY,
-    period_start TIMESTAMP(6) NOT NULL,
-    period_end TIMESTAMP(6) NOT NULL,
+    start_date DATE NOT NULL,
+    end_date DATE NOT NULL,
     amount       INT NOT NULL,
     member_id     BIGINT NOT NULL,
     category_id     BIGINT NOT NULL,
