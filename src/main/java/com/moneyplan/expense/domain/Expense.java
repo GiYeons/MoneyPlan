@@ -11,6 +11,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import java.time.LocalDateTime;
+import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -55,5 +56,15 @@ public class Expense {
         this.amount = amount;
         this.memo = memo;
         this.isTotalExcluded = isTotalExcluded;
+    }
+
+    public void update(Category category, LocalDateTime spentAt, int amount, String memo, boolean isTotalExcluded) {
+        Optional.ofNullable(category).ifPresent(updatedCategory -> this.category = updatedCategory);
+        Optional.ofNullable(spentAt).ifPresent(updatedSpentAt -> this.spentAt = updatedSpentAt);
+        Optional.ofNullable(amount).ifPresent(updatedAmount -> this.amount = updatedAmount);
+        Optional.ofNullable(isTotalExcluded).ifPresent(updatedIsTotalExcluded -> this.isTotalExcluded = updatedIsTotalExcluded);
+
+        // memo는 nullable
+        this.memo = memo;
     }
 }
