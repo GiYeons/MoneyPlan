@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 import lombok.Getter;
 
 @Getter
-public class ExpenseCreateReq {
+public class ExpenseReq {
 
     private Long categoryId;
     private LocalDateTime spentAt;

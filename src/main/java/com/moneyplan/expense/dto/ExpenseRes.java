@@ -9,7 +9,7 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class ExpenseCreateRes {
+public class ExpenseRes {
 
     private Long id;
     private MemberRes member;
@@ -19,8 +19,8 @@ public class ExpenseCreateRes {
     private String memo;
     private boolean isTotalExcluded;
 
-    public static ExpenseCreateRes of(Expense expense) {
-        return ExpenseCreateRes.builder()
+    public static ExpenseRes of(Expense expense) {
+        return ExpenseRes.builder()
             .id(expense.getId())
             .member(MemberRes.of(expense.getMember()))
             .category(CategoryRes.of(expense.getCategory()))
