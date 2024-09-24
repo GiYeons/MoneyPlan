@@ -1,5 +1,6 @@
 package com.moneyplan.expense.domain;
 
+import com.moneyplan.category.domain.Category;
 import com.moneyplan.member.domain.Member;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -23,6 +24,10 @@ public class Expense {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id")
+    private Category category;
 
     @Column(nullable = false)
     private LocalDateTime spent_at;

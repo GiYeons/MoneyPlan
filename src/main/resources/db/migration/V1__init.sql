@@ -39,7 +39,9 @@ CREATE TABLE IF NOT EXISTS expense
     memo VARCHAR(1000) NULL,
     is_total_excluded TINYINT DEFAULT 0 NOT NULL,
     member_id     BIGINT NOT NULL,
-    CONSTRAINT fk_member_expense FOREIGN KEY (member_id) REFERENCES member (id)
+    category_id     BIGINT NOT NULL,
+    CONSTRAINT fk_member_expense FOREIGN KEY (member_id) REFERENCES member (id),
+    CONSTRAINT fk_category_expense FOREIGN KEY (category_id) REFERENCES category (id)
 );
 
 CREATE TABLE IF NOT EXISTS category_average_budget
