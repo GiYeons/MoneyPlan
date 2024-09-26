@@ -9,7 +9,7 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class ExpenseCreateRes {
+public class ExpenseRes {
 
     private Long id;
     private MemberRes member;
@@ -17,17 +17,17 @@ public class ExpenseCreateRes {
     private LocalDateTime spentAt;
     private int amount;
     private String memo;
-    private boolean isTotalExcluded;
+    private Boolean isTotalExcluded;
 
-    public static ExpenseCreateRes of(Expense expense) {
-        return ExpenseCreateRes.builder()
+    public static ExpenseRes of(Expense expense) {
+        return ExpenseRes.builder()
             .id(expense.getId())
             .member(MemberRes.of(expense.getMember()))
             .category(CategoryRes.of(expense.getCategory()))
             .spentAt(expense.getSpentAt())
             .amount(expense.getAmount())
             .memo(expense.getMemo())
-            .isTotalExcluded(expense.isTotalExcluded())
+            .isTotalExcluded(expense.getIsTotalExcluded())
             .build();
     }
 
