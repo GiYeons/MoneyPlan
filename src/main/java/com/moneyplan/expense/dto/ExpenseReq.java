@@ -13,7 +13,7 @@ public class ExpenseReq {
     private LocalDateTime spentAt;
     private int amount;
     private String memo;
-    private boolean isTotalExcluded;
+    private Boolean isTotalExcluded;
 
     public Expense toExpense(Member member, Category category) {
         return Expense.builder()

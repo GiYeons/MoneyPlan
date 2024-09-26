@@ -1,5 +1,6 @@
 package com.moneyplan.expense.domain;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.moneyplan.category.domain.Category;
 import com.moneyplan.member.domain.Member;
 import jakarta.persistence.Column;
@@ -44,8 +45,7 @@ public class Expense {
     private String memo;
 
     @Column(nullable = false, columnDefinition = "TINYINT(1)")
-    @ColumnDefault("0")
-    private boolean isTotalExcluded;
+    private Boolean isTotalExcluded;
 
     @Builder
     public Expense(Member member, Category category, LocalDateTime spentAt, int amount, String memo,
@@ -61,10 +61,12 @@ public class Expense {
     public void update(Category category, LocalDateTime spentAt, int amount, String memo, boolean isTotalExcluded) {
         Optional.ofNullable(category).ifPresent(updatedCategory -> this.category = updatedCategory);
         Optional.ofNullable(spentAt).ifPresent(updatedSpentAt -> this.spentAt = updatedSpentAt);
-        Optional.ofNullable(amount).ifPresent(updatedAmount -> this.amount = updatedAmount);
-        Optional.ofNullable(isTotalExcluded).ifPresent(updatedIsTotalExcluded -> this.isTotalExcluded = updatedIsTotalExcluded);
 
-        // memo는 nullable
+        /*
+        * memo는 nullable
+        */
         this.memo = memo;
+        this.amount = (amount >= 0) ? amount : this.amount;
+        this.isTotalExcluded = isTotalExcluded;
     }
 }

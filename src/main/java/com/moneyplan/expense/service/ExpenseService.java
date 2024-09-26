@@ -54,7 +54,7 @@ public class ExpenseService {
         Category category = categoryRepository.findById(req.getCategoryId())
             .orElseThrow(() -> new BusinessException(ErrorCode.CATEGORY_NOT_FOUND));
 
-        expense.update(category, req.getSpentAt(), req.getAmount(), req.getMemo(), req.isTotalExcluded());
+        expense.update(category, req.getSpentAt(), req.getAmount(), req.getMemo(), req.getIsTotalExcluded());
 
         return ExpenseRes.of(expense);
     }

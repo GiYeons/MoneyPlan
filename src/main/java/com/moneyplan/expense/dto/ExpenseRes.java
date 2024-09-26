@@ -17,7 +17,7 @@ public class ExpenseRes {
     private LocalDateTime spentAt;
     private int amount;
     private String memo;
-    private boolean isTotalExcluded;
+    private Boolean isTotalExcluded;
 
     public static ExpenseRes of(Expense expense) {
         return ExpenseRes.builder()
@@ -27,7 +27,7 @@ public class ExpenseRes {
             .spentAt(expense.getSpentAt())
             .amount(expense.getAmount())
             .memo(expense.getMemo())
-            .isTotalExcluded(expense.isTotalExcluded())
+            .isTotalExcluded(expense.getIsTotalExcluded())
             .build();
     }
 
