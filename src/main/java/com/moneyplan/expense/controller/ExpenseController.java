@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -44,5 +45,12 @@ public class ExpenseController {
     public ResponseEntity<String> deleteExpense(@PathVariable Long id) {
         expenseService.deleteExpense(id);
         return ResponseEntity.status(HttpStatus.OK).body("success");
+    }
+
+    @GetMapping("/{id}")
+    @Operation(summary = "지출 기록 조회 (상세)", description = "지출 기록(상세)을 단건 조회합니다.")
+    public ResponseEntity<ExpenseRes> getExpense(@PathVariable Long id) {
+        ExpenseRes res = expenseService.getExpense(id);
+        return ResponseEntity.ok(res);
     }
 }
