@@ -58,4 +58,18 @@ public class ExpenseService {
 
         return ExpenseRes.of(expense);
     }
+
+    @Transactional
+    public void deleteExpense(Long id) {
+
+        // 회원가입/로그인 구현 전 임시 코드
+        Member member = memberRepository.findById(1L)
+            .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND));
+        // 임시 코드 끝
+
+        Expense expense = expenseRepository.findById(id)
+            .orElseThrow(() -> new BusinessException(ErrorCode.EXPENSE_NOT_FOUND));
+
+        expenseRepository.deleteById(id);
+    }
 }

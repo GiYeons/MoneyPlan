@@ -5,8 +5,11 @@ import com.moneyplan.expense.dto.ExpenseRes;
 import com.moneyplan.expense.service.ExpenseService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -34,5 +37,12 @@ public class ExpenseController {
     public ResponseEntity<ExpenseRes> updateExpense(@PathVariable Long id, @RequestBody ExpenseReq req) {
         ExpenseRes res = expenseService.updateExpense(id, req);
         return ResponseEntity.ok(res);
+    }
+
+    @DeleteMapping("/{id}")
+    @Operation(summary = "지출 기록 삭제", description = "지출 기록을 삭제합니다.")
+    public ResponseEntity<String> deleteExpense(@PathVariable Long id) {
+        expenseService.deleteExpense(id);
+        return ResponseEntity.status(HttpStatus.OK).body("success");
     }
 }
