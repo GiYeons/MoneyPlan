@@ -4,14 +4,24 @@ import com.moneyplan.category.domain.Category;
 import com.moneyplan.category.repository.CategoryRepository;
 import com.moneyplan.common.exception.BusinessException;
 import com.moneyplan.common.exception.ErrorCode;
+import com.moneyplan.common.model.PageInfo;
 import com.moneyplan.expense.domain.Expense;
 import com.moneyplan.expense.dto.ExpenseReq;
 import com.moneyplan.expense.dto.ExpenseRes;
+import com.moneyplan.expense.dto.ExpensesRes;
+import com.moneyplan.expense.dto.ExpensesRes.ExpenseCategoryTotal;
+import com.moneyplan.expense.dto.ExpensesRes.ExpenseItem;
 import com.moneyplan.expense.repository.ExpenseRepository;
+import com.moneyplan.expense.repository.custom.ExpenseCustomRepository;
+import com.moneyplan.expense.service.filter.ExpenseFilter;
 import com.moneyplan.member.domain.Member;
 import com.moneyplan.member.repository.MemberRepository;
-import java.util.Optional;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -71,5 +81,46 @@ public class ExpenseService {
             .orElseThrow(() -> new BusinessException(ErrorCode.EXPENSE_NOT_FOUND));
 
         expenseRepository.deleteById(id);
+    }
+
+    @Transactional
+    public ExpenseRes getExpense(Long id) {
+
+        // 회원가입/로그인 구현 전 임시 코드
+        Member member = memberRepository.findById(1L)
+            .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND));
+        // 임시 코드 끝
+
+        Expense expense = expenseRepository.findById(id)
+            .orElseThrow(() -> new BusinessException(ErrorCode.EXPENSE_NOT_FOUND));
+
+        return ExpenseRes.of(expense);
+    }
+
+    @Transactional
+    public ExpensesRes getExpenses(int page, int size, ExpenseFilter filter) {
+
+        // 회원가입/로그인 구현 전 임시 코드
+        Member member = memberRepository.findById(1L)
+            .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND));
+        // 임시 코드 끝
+
+        Pageable paging = PageRequest.of(page, size);
+        Page<Expense> expensePage = expenseRepository.findWithFilters(paging, filter);
+
+        List<ExpenseItem> expenseItems = expensePage.getContent().stream()
+            .map(ExpenseItem::of)
+            .collect(Collectors.toList());
+
+        PageInfo pageInfo = new PageInfo(expensePage);
+        int totalAmount = expenseRepository.calculateTotalAmount(filter);
+        List<ExpenseCategoryTotal> categoryTotals = expenseRepository.calculateCategoryTotals(filter);
+
+        return ExpensesRes.builder()
+            .expenses(expenseItems)
+            .pageInfo(pageInfo)
+            .totalAmount(totalAmount)
+            .expenseCategoryTotals(categoryTotals)
+            .build();
     }
 }
