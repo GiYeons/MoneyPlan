@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import lombok.Builder;
 import lombok.Getter;
 
 @Entity
@@ -19,4 +20,10 @@ public class Member {
 
     @Column(nullable = false)
     private String password;
+
+    @Builder
+    public Member(String account, String password) {
+        this.account = account;
+        this.password = password;
+    }
 }

@@ -21,10 +21,14 @@ public enum ErrorCode {
     /**
      * 404 - Not Found
      */
-    MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 멤버입니다."),
+    MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 회원입니다."),
     CATEGORY_NOT_FOUND(HttpStatus.NOT_FOUND, "카테고리를 찾을 수 없습니다."),
     EXPENSE_NOT_FOUND(HttpStatus.NOT_FOUND, "지출을 찾을 수 없습니다."),
 
+    /**
+     * 403 - Forbidden
+     */
+    ACCOUNT_CONFLICT(HttpStatus.CONFLICT, "이미 사용중인 계정입니다."),
 
     /**
      * 500 - Internal Server Error
