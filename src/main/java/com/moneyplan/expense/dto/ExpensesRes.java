@@ -3,6 +3,7 @@ package com.moneyplan.expense.dto;
 import com.moneyplan.category.dto.CategoryRes;
 import com.moneyplan.common.model.PageInfo;
 import com.moneyplan.expense.domain.Expense;
+import com.querydsl.core.annotations.QueryProjection;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.Builder;
@@ -51,6 +52,7 @@ public class ExpensesRes {
         private String name;
         private int totalAmount;
 
+        @QueryProjection
         public ExpenseCategoryTotal(String name, int totalAmount) {
             this.name = name;
             this.totalAmount = totalAmount;

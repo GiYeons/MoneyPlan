@@ -9,6 +9,7 @@ import com.moneyplan.expense.domain.Expense;
 import com.moneyplan.expense.dto.ExpenseReq;
 import com.moneyplan.expense.dto.ExpenseRes;
 import com.moneyplan.expense.dto.ExpensesRes;
+import com.moneyplan.expense.dto.ExpensesRes.ExpenseCategoryTotal;
 import com.moneyplan.expense.dto.ExpensesRes.ExpenseItem;
 import com.moneyplan.expense.repository.ExpenseRepository;
 import com.moneyplan.expense.repository.custom.ExpenseCustomRepository;
@@ -112,10 +113,14 @@ public class ExpenseService {
             .collect(Collectors.toList());
 
         PageInfo pageInfo = new PageInfo(expensePage);
+        int totalAmount = expenseRepository.calculateTotalAmount(filter);
+        List<ExpenseCategoryTotal> categoryTotals = expenseRepository.calculateCategoryTotals(filter);
 
         return ExpensesRes.builder()
             .expenses(expenseItems)
             .pageInfo(pageInfo)
+            .totalAmount(totalAmount)
+            .expenseCategoryTotals(categoryTotals)
             .build();
     }
 }

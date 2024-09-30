@@ -63,8 +63,8 @@ public class ExpenseController {
     }
 
     @GetMapping("/")
-    @Operation(summary = "지출 기록 조회 (목록)", description = "기간별 지출 기록을 조회합니다. "
-        + "카테고리, 최소 금액, 최대 금액을 지정할 수 있습니다(선택).")
+    @Operation(summary = "지출 기록 조회 (목록)", description = "기간별 지출 기록을 조회합니다. 지출 합계 및 "
+        + "카테고리별 지출 합계를 함께 반환합니다. 카테고리, 최소 금액, 최대 금액을 지정할 수 있습니다(선택).")
     public ResponseEntity<ExpensesRes> getExpenses(
         @Parameter(description = "시작일", example = "2024-09-01T00:00:00")
         @RequestParam @NotNull LocalDateTime startDate,

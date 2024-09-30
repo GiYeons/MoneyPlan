@@ -3,6 +3,8 @@ package com.moneyplan.expense.repository.custom;
 import static com.moneyplan.expense.domain.QExpense.expense;
 
 import com.moneyplan.expense.domain.Expense;
+import com.moneyplan.expense.dto.ExpensesRes.ExpenseCategoryTotal;
+import com.moneyplan.expense.dto.QExpensesRes_ExpenseCategoryTotal;
 import com.moneyplan.expense.service.filter.ExpenseFilter;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
@@ -26,13 +28,7 @@ public class ExpenseCustomRepositoryImpl implements ExpenseCustomRepository{
     public Page<Expense> findWithFilters(Pageable pageable, ExpenseFilter filter) {
         List<Expense> expenses = jpaQueryFactory
             .selectFrom(expense)
-            .where(
-                expense.spentAt.goe(filter.getStartDate())
-                        .and(expense.spentAt.loe(filter.getEndDate())),
-                categoryEq(filter.getCategoryId()),
-                amountGoe(filter.getMinAmount()),
-                amountLoe(filter.getMaxAmount())
-            )
+            .where(buildConditions(filter))
             .orderBy(expense.spentAt.desc())
             .offset(pageable.getOffset())
             .limit(pageable.getPageSize())
@@ -44,6 +40,42 @@ public class ExpenseCustomRepositoryImpl implements ExpenseCustomRepository{
             .where(categoryEq(filter.getCategoryId()));
 
         return PageableExecutionUtils.getPage(expenses, pageable, countQuery::fetchOne);
+    }
+
+    @Override
+    public int calculateTotalAmount(ExpenseFilter filter) {
+        return jpaQueryFactory
+            .select(expense.amount.sum().coalesce(0))
+            .from(expense)
+            .where(
+                buildConditions(filter),
+                expense.isTotalExcluded.eq(false)
+            )
+            .fetchOne();
+    }
+
+    @Override
+    public List<ExpenseCategoryTotal> calculateCategoryTotals(ExpenseFilter filter) {
+        return jpaQueryFactory
+            .select(new QExpensesRes_ExpenseCategoryTotal(
+                expense.category.name,
+                expense.amount.sum().intValue().coalesce(0)
+            ))
+            .from(expense)
+            .where(
+                buildConditions(filter),
+                expense.isTotalExcluded.eq(false)
+                )
+            .groupBy(expense.category.name)
+            .fetch();
+    }
+
+    private BooleanExpression buildConditions(ExpenseFilter filter) {
+        return expense.spentAt.goe(filter.getStartDate())
+            .and(expense.spentAt.loe(filter.getEndDate()))
+            .and(categoryEq(filter.getCategoryId()))
+            .and(amountGoe(filter.getMinAmount()))
+            .and(amountLoe(filter.getMaxAmount()));
     }
 
     private BooleanExpression categoryEq(Long categoryId) {
