@@ -37,7 +37,7 @@ public class ExpenseCustomRepositoryImpl implements ExpenseCustomRepository{
         JPAQuery<Long> countQuery = jpaQueryFactory
             .select(expense.count())
             .from(expense)
-            .where(categoryEq(filter.getCategoryId()));
+            .where(buildConditions(filter));
 
         return PageableExecutionUtils.getPage(expenses, pageable, countQuery::fetchOne);
     }
@@ -71,7 +71,8 @@ public class ExpenseCustomRepositoryImpl implements ExpenseCustomRepository{
     }
 
     private BooleanExpression buildConditions(ExpenseFilter filter) {
-        return expense.spentAt.goe(filter.getStartDate())
+        return expense.member.id.eq(filter.getMemberId())
+            .and(expense.spentAt.goe(filter.getStartDate()))
             .and(expense.spentAt.loe(filter.getEndDate()))
             .and(categoryEq(filter.getCategoryId()))
             .and(amountGoe(filter.getMinAmount()))

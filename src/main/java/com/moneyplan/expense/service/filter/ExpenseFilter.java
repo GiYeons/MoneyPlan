@@ -7,6 +7,8 @@ import lombok.Getter;
 @Getter
 public class ExpenseFilter {
 
+    Long memberId;
+
     LocalDateTime startDate;
     LocalDateTime endDate;
     Long categoryId;
@@ -14,12 +16,17 @@ public class ExpenseFilter {
     Integer maxAmount;
 
     @Builder
-    public ExpenseFilter(LocalDateTime startDate, LocalDateTime endDate, Long categoryId,
+    public ExpenseFilter(Long memberId, LocalDateTime startDate, LocalDateTime endDate, Long categoryId,
         Integer minAmount, Integer maxAmount) {
+        this.memberId = memberId;
         this.startDate = startDate;
         this.endDate = endDate;
         this.categoryId = categoryId;
         this.minAmount = minAmount;
         this.maxAmount = maxAmount;
+    }
+
+    public void updateMemberId(Long memberId) {
+        this.memberId = memberId;
     }
 }

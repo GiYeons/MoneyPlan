@@ -1,10 +1,12 @@
 package com.moneyplan.expense.controller;
 
+import com.moneyplan.common.auth.model.AuthUser;
 import com.moneyplan.expense.dto.ExpenseReq;
 import com.moneyplan.expense.dto.ExpenseRes;
 import com.moneyplan.expense.dto.ExpensesRes;
 import com.moneyplan.expense.service.ExpenseService;
 import com.moneyplan.expense.service.filter.ExpenseFilter;
+import com.moneyplan.member.domain.Member;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -36,29 +38,29 @@ public class ExpenseController {
 
     @PostMapping("/")
     @Operation(summary = "지출 기록 생성", description = "지출 기록을 생성합니다.")
-    public ResponseEntity<ExpenseRes> createExpense(@RequestBody ExpenseReq req) {
-        ExpenseRes res = expenseService.createExpense(req);
+    public ResponseEntity<ExpenseRes> createExpense(@AuthUser Member member, @RequestBody ExpenseReq req) {
+        ExpenseRes res = expenseService.createExpense(member, req);
         return ResponseEntity.ok(res);
     }
 
     @PutMapping("/{id}")
     @Operation(summary = "지출 기록 수정", description = "지출 기록을 수정합니다.")
-    public ResponseEntity<ExpenseRes> updateExpense(@PathVariable Long id, @RequestBody ExpenseReq req) {
-        ExpenseRes res = expenseService.updateExpense(id, req);
+    public ResponseEntity<ExpenseRes> updateExpense(@AuthUser Member member, @PathVariable Long id, @RequestBody ExpenseReq req) {
+        ExpenseRes res = expenseService.updateExpense(member, id, req);
         return ResponseEntity.ok(res);
     }
 
     @DeleteMapping("/{id}")
     @Operation(summary = "지출 기록 삭제", description = "지출 기록을 삭제합니다.")
-    public ResponseEntity<String> deleteExpense(@PathVariable Long id) {
-        expenseService.deleteExpense(id);
+    public ResponseEntity<String> deleteExpense(@AuthUser Member member, @PathVariable Long id) {
+        expenseService.deleteExpense(member, id);
         return ResponseEntity.status(HttpStatus.OK).body("success");
     }
 
     @GetMapping("/{id}")
     @Operation(summary = "지출 기록 조회 (상세)", description = "지출 기록(상세)을 단건 조회합니다.")
-    public ResponseEntity<ExpenseRes> getExpense(@PathVariable Long id) {
-        ExpenseRes res = expenseService.getExpense(id);
+    public ResponseEntity<ExpenseRes> getExpense(@AuthUser Member member, @PathVariable Long id) {
+        ExpenseRes res = expenseService.getExpense(member, id);
         return ResponseEntity.ok(res);
     }
 
@@ -66,6 +68,7 @@ public class ExpenseController {
     @Operation(summary = "지출 기록 조회 (목록)", description = "기간별 지출 기록을 조회합니다. 지출 합계 및 "
         + "카테고리별 지출 합계를 함께 반환합니다. 카테고리, 최소 금액, 최대 금액을 지정할 수 있습니다(선택).")
     public ResponseEntity<ExpensesRes> getExpenses(
+        @AuthUser Member member,
         @Parameter(description = "시작일", example = "2024-09-01T00:00:00")
         @RequestParam @NotNull LocalDateTime startDate,
         @Parameter(description = "종료일", example = "2024-09-30T23:59:59")
@@ -89,7 +92,7 @@ public class ExpenseController {
             .maxAmount(maxAmount)
             .build();
 
-        ExpensesRes res = expenseService.getExpenses(page, size, filter);
+        ExpensesRes res = expenseService.getExpenses(member, page, size, filter);
         return ResponseEntity.ok(res);
     }
 }
