@@ -1,5 +1,11 @@
 package com.moneyplan.common.config;
 
+import static com.moneyplan.common.auth.model.SecurityConstants.PERMITTED_URI;
+
+import com.moneyplan.common.auth.JwtAuthenticationFilter;
+import com.moneyplan.common.auth.JwtService;
+import com.moneyplan.common.exception.ExceptionHandlerFilter;
+import com.moneyplan.member.repository.MemberRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,10 +24,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @AllArgsConstructor
 public class SecurityConfig {
 
-    private static final String[] AUTH_WHITELIST = {
-        "/h2-console/**","/swagger-ui/**", "/api-docs", "/swagger-ui-custom.html",
-        "/v3/api-docs/**", "/api-docs/**", "/swagger-ui.html", "/api/v1/**"
-    };
+    private final JwtService jwtService;
+    private final MemberRepository memberRepository;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -37,9 +41,12 @@ public class SecurityConfig {
 
         http.headers((headers) -> headers.frameOptions(FrameOptionsConfig::sameOrigin));
 
+        http.addFilterBefore(new JwtAuthenticationFilter(jwtService, memberRepository), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(new ExceptionHandlerFilter(), JwtAuthenticationFilter.class);
+
         http.authorizeHttpRequests(authorize -> authorize
-            .requestMatchers(AUTH_WHITELIST).permitAll()
-            .anyRequest().permitAll());
+            .requestMatchers(PERMITTED_URI).permitAll()
+            .anyRequest().authenticated());
 
         return http.build();
     }
