@@ -31,21 +31,23 @@ public class BudgetService {
         if (member == null) {
             throw new BusinessException(ErrorCode.MISSING_AUTHENTICATION);
         }
-        List<BudgetCreateRes> res = new ArrayList<>();
 
-        req.getCategoryBudgets().forEach((categoryName, amount) -> {
+        List<BudgetCreateRes> res = new ArrayList<>();
+        List<Category> categories = categoryRepository.findAll();
+        Map<String, Integer> categoryBudgets = req.getCategoryBudgets();
+
+        for (Category category : categories) {
+            // 해당 카테고리에 대한 예산이 존재하지 않을 경우 기본값 0
+            int amount = categoryBudgets.getOrDefault(category.getName(), 0);
+
             if (amount < 0) {
                 throw new BusinessException(ErrorCode.INVALID_AMOUNT_EXCEPTION);
             }
-            Category category = categoryRepository.findByName(categoryName)
-                .orElseThrow(() -> new BusinessException(ErrorCode.CATEGORY_NOT_FOUND));
-
             Budget budget = req.toBudget(member, category, amount);
             budgetRepository.save(budget);
 
             res.add(BudgetCreateRes.of(budget));
-        });
-
+        }
         return res;
     }
 }
