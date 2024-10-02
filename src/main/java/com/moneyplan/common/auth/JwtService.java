@@ -40,10 +40,10 @@ public class JwtService {
 
     public JwtService(CustomUserDetailService customUserDetailService, JwtGenerator jwtGenerator,
         JwtUtil jwtUtil, RefreshTokenRepository refreshTokenRepository,
-        @Value("${jwt.key.access}") String ACCESS_SECRET_KEY,
-        @Value("${jwt.key.refresh}") String REFRESH_SECRET_KEY,
-        @Value("${jwt.time.access}") long ACCESS_EXPIRATION,
-        @Value("${jwt.time.access}") long REFRESH_EXPIRATION
+        @Value("${ACCESS_SECRET}") String ACCESS_SECRET_KEY,
+        @Value("${REFRESH_SECRET}") String REFRESH_SECRET_KEY,
+        @Value("${ACCESS_EXPIRATION}") long ACCESS_EXPIRATION,
+        @Value("${REFRESH_EXPIRATION}") long REFRESH_EXPIRATION
     ) {
         this.customUserDetailService = customUserDetailService;
         this.jwtGenerator = jwtGenerator;
