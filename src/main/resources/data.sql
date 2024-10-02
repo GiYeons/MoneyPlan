@@ -1,5 +1,8 @@
 INSERT IGNORE INTO member (id, account, password)
-VALUES (1, 'moneyplan', '$2a$10$cAz0EmZYfqzngI46j91lX.GdJ9hlmYbMsOa5Esr0Hh.rwyfDb8dYW');
+-- password1234@
+VALUES
+(1, 'MoneyPlan', '$2a$10$mIyRde.YyDr8fvyaXpCJPO0Go.f7oG/8dsLngB9hTTA4imzajK6Q6'),
+(2, 'MoneyMap', '$2a$10$P9RH4WZ2JRe6miyoJjV1vuSIUh073yIgLDANukaUHq2sXuo8EOWzO');
 
 INSERT IGNORE INTO category (name)
 VALUES
@@ -17,6 +20,7 @@ VALUES
 
 INSERT IGNORE INTO expense (spent_at, amount, memo, is_total_excluded, member_id, category_id)
 VALUES
+-- MoneyPlan
 -- 식비
 ('2024-09-02 19:30:00', 9000, '친구들 만나서 저녁식사 했음', false, 1, 1),
 ('2024-09-04 20:00:00', 3900, '편의점 샌드위치', false, 1, 1),
@@ -33,4 +37,25 @@ VALUES
 ('2024-09-11 9:00:00', 35000, '방구석 뮤지컬 티켓값', false, 1, 6),
 
 -- 기타
-('2024-09-10 01:20:00', 100000, '친구한테 빌려줌', true, 1, 11);
+('2024-09-10 01:20:00', 100000, '친구한테 빌려줌', true, 1, 11),
+
+-- MoneyMap
+-- 식비
+('2024-09-03 19:30:00', 12000, '선배랑 점심에 초밥', false, 2, 1),
+('2024-09-07 20:00:00', 7200, '버거킹', false, 2, 1),
+('2024-09-24 09:00:00', 5400, '간식', false, 2, 1),
+('2024-09-26 14:00:00', 3000, null, false, 2, 1),
+
+-- 패션
+('2024-09-01 17:20:00', 50000, '청바지', false, 2, 5),
+('2024-09-13 17:20:00', 10000, '무지티 1장', false, 2, 5),
+('2024-09-14 17:20:00', 33000, '빈티지 셔츠', false, 2, 5),
+
+-- 여가
+('2024-09-02 20:10:00', 7000, '네이버웹툰 캐시 결제', false, 2, 6),
+('2024-09-07 13:20:00', 48200, '오첨뮤 티켓값', true, 2, 6),
+('2024-09-11 9:00:00', 35000, '브론테 티켓값', true, 2, 6),
+
+-- 교육
+('2024-09-29 01:20:00', 30000, '정처기 실기 교재 구매', true, 2, 10);
+

@@ -26,13 +26,11 @@ public class BudgetService {
     private final BudgetRepository budgetRepository;
 
     @Transactional
-    public List<BudgetCreateRes> createBudget(BudgetCreateReq req) {
+    public List<BudgetCreateRes> createBudget(Member member, BudgetCreateReq req) {
 
-        // 회원가입/로그인 구현 전 임시 코드
-        Member member = memberRepository.findById(1L)
-            .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND));
-        // 임시 코드 끝
-
+        if (member == null) {
+            throw new BusinessException(ErrorCode.MISSING_AUTHENTICATION);
+        }
         List<BudgetCreateRes> res = new ArrayList<>();
 
         req.getCategoryBudgets().forEach((categoryName, amount) -> {

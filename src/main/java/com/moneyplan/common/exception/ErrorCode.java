@@ -19,16 +19,27 @@ public enum ErrorCode {
     INVALID_AMOUNT_EXCEPTION(HttpStatus.BAD_REQUEST, "예산 금액은 0 이상이어야 합니다."),
 
     /**
+     * 401 - Unauthorized
+     */
+    INVALID_CREDENTIALS(HttpStatus.UNAUTHORIZED, "계정명 또는 비밀번호가 틀렸습니다."),
+    INVALID_JWT_TOKEN(HttpStatus.UNAUTHORIZED, "유효하지 않은 토큰입니다."),
+    EXPIRED_JWT_TOKEN(HttpStatus.UNAUTHORIZED, "유효기간이 만료된 토큰입니다."),
+    MISSING_TOKEN_IN_COOKIE(HttpStatus.UNAUTHORIZED, "쿠키에 토큰이 존재하지 않습니다."),
+    MISSING_AUTHENTICATION(HttpStatus.UNAUTHORIZED, "인증 정보가 존재하지 않습니다."),
+
+    /**
      * 404 - Not Found
      */
     MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 회원입니다."),
     CATEGORY_NOT_FOUND(HttpStatus.NOT_FOUND, "카테고리를 찾을 수 없습니다."),
     EXPENSE_NOT_FOUND(HttpStatus.NOT_FOUND, "지출을 찾을 수 없습니다."),
+    JWT_TOKEN_NOT_FOUND(HttpStatus.NOT_FOUND, "토큰을 찾을 수 없습니다."),
 
     /**
      * 403 - Forbidden
      */
     ACCOUNT_CONFLICT(HttpStatus.CONFLICT, "이미 사용중인 계정입니다."),
+    FORBIDDEN_ACCESS(HttpStatus.CONFLICT, "접근 권한이 없습니다."),
 
     /**
      * 500 - Internal Server Error

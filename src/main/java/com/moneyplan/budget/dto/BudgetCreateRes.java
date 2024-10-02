@@ -11,7 +11,6 @@ import lombok.Getter;
 @Builder
 public class BudgetCreateRes {
     private Long id;
-    private MemberRes member;
     private CategoryRes category;
     private LocalDate startDate;
     private LocalDate endDate;
@@ -20,7 +19,6 @@ public class BudgetCreateRes {
     public static BudgetCreateRes of(Budget budget) {
         return BudgetCreateRes.builder()
             .id(budget.getId())
-            .member(MemberRes.of(budget.getMember()))
             .category(CategoryRes.of(budget.getCategory()))
             .startDate(budget.getStartDate())
             .endDate(budget.getEndDate())

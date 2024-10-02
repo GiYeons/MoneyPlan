@@ -84,7 +84,7 @@ jacocoTestReport {
 			classDirectories.setFrom(
 					files(classDirectories.files.collect {
 						fileTree(dir: it, excludes: [
-								"com/tenten/damoa/**/domain/**",
+								"com/moneyplan/**/model/**",
 								"**/*Application*",
 								"**/*Config*",
 								"**/*Req*",

@@ -3,6 +3,8 @@ package com.moneyplan.budget.controller;
 import com.moneyplan.budget.dto.BudgetCreateReq;
 import com.moneyplan.budget.dto.BudgetCreateRes;
 import com.moneyplan.budget.service.BudgetService;
+import com.moneyplan.common.auth.model.AuthUser;
+import com.moneyplan.member.domain.Member;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
@@ -24,8 +26,9 @@ public class BudgetController {
 
     @PostMapping("/")
     @Operation(summary = "예산 설정", description = "기간별 예산을 설정합니다.")
-    public ResponseEntity<List<BudgetCreateRes>> createBudget(@RequestBody BudgetCreateReq req) {
-        List<BudgetCreateRes> res = budgetService.createBudget(req);
+    public ResponseEntity<List<BudgetCreateRes>> createBudget(@AuthUser Member member,
+        @RequestBody BudgetCreateReq req) {
+        List<BudgetCreateRes> res = budgetService.createBudget(member, req);
         return ResponseEntity.ok(res);
     }
 
