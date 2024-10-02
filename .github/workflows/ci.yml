@@ -35,4 +35,4 @@ jobs:
           elif [ "${{ github.ref_name }}" = "main" ]; then
             PROFILE="prod"
           fi
-          ./gradlew clean build -Pprofile=$PROFILE
+          ./gradlew clean build -Pprofile=$PROFILE -i
