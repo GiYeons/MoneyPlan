@@ -1,4 +1,6 @@
 spring:
+  config:
+    import: application-secret.properties
   sql:
     init:
       mode: never
@@ -10,11 +12,3 @@ spring:
         show_sql: true
         format_sql: true
     open-in-view: false
-    
-jwt:
-  key:
-    access: ${ACCESS_SECRET}
-    refresh: ${REFRESH_SECRET}
-  time:
-    access: ${ACCESS_EXPIRATION}
-    refresh: ${REFRESH_EXPIRATION}
