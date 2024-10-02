@@ -1,11 +1,14 @@
 package com.moneyplan.member.controller;
 
+import com.moneyplan.member.dto.LoginMemberReq;
+import com.moneyplan.member.dto.LoginMemberRes;
 import com.moneyplan.member.dto.MemberReq;
 import com.moneyplan.member.dto.MemberRes;
 import com.moneyplan.member.repository.MemberRepository;
 import com.moneyplan.member.service.MemberService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -30,5 +33,12 @@ public class MemberController {
         return ResponseEntity.ok(res);
     }
 
+    @PostMapping("/login")
+    @Operation(summary = "로그인", description = "계정명과 비밀번호로 로그인을 합니다.")
+    public ResponseEntity<LoginMemberRes> login(HttpServletResponse httpRes,
+        @Valid @RequestBody LoginMemberReq req) {
 
+        LoginMemberRes res = memberService.login(httpRes, req);
+        return ResponseEntity.ok(res);
+    }
 }
