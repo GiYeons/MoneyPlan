@@ -2,9 +2,12 @@ package com.moneyplan.budget.service;
 
 import com.moneyplan.budget.domain.Budget;
 import com.moneyplan.budget.dto.BudgetCreateReq;
-import com.moneyplan.budget.dto.BudgetCreateRes;
+import com.moneyplan.budget.dto.BudgetRes;
+import com.moneyplan.budget.dto.BudgetSuggestReq;
+import com.moneyplan.budget.dto.BudgetSuggestRes;
 import com.moneyplan.budget.repository.BudgetRepository;
 import com.moneyplan.category.domain.Category;
+import com.moneyplan.category.dto.CategoryRes;
 import com.moneyplan.category.repository.CategoryRepository;
 import com.moneyplan.common.exception.BusinessException;
 import com.moneyplan.common.exception.ErrorCode;
@@ -26,13 +29,13 @@ public class BudgetService {
     private final BudgetRepository budgetRepository;
 
     @Transactional
-    public List<BudgetCreateRes> createBudget(Member member, BudgetCreateReq req) {
+    public List<BudgetRes> createBudget(Member member, BudgetCreateReq req) {
 
         if (member == null) {
             throw new BusinessException(ErrorCode.MISSING_AUTHENTICATION);
         }
 
-        List<BudgetCreateRes> res = new ArrayList<>();
+        List<BudgetRes> res = new ArrayList<>();
         List<Category> categories = categoryRepository.findAll();
         Map<String, Integer> categoryBudgets = req.getCategoryBudgets();
 
@@ -46,8 +49,57 @@ public class BudgetService {
             Budget budget = req.toBudget(member, category, amount);
             budgetRepository.save(budget);
 
-            res.add(BudgetCreateRes.of(budget));
+            res.add(BudgetRes.of(budget));
         }
         return res;
+    }
+
+    @Transactional
+    public List<BudgetSuggestRes> suggestBudget(BudgetSuggestReq req) {
+
+        List<BudgetSuggestRes> res = new ArrayList<>();
+        int totalAmount = req.getTotalAmount();
+
+        Map<Long, Double> categoryPercentages = budgetRepository.calculateCategoryPercentages();
+
+        int currentTotal = 0;
+
+        for (Long categoryId : categoryPercentages.keySet()) {
+            Category category = categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.CATEGORY_NOT_FOUND));
+
+            Double percentage = categoryPercentages.get(categoryId);
+
+            if ("기타".equals(category.getName())) {
+                continue;
+            }
+
+            // 10% 이하의 비율은 기타에 합산함
+            int suggestedAmount = (percentage < 0.1) ? 0 : roundToNearestThousand(totalAmount * percentage);
+            currentTotal += suggestedAmount;
+
+            res.add(BudgetSuggestRes.builder()
+                .category(CategoryRes.of(category))
+                .amount(suggestedAmount)
+                .build());
+        }
+
+        // 기타 카테고리 예산 계산
+        int remainingAmount = totalAmount - currentTotal;
+
+        if (remainingAmount > 0) {
+            Category otherCategory = categoryRepository.findByName("기타")
+                .orElseThrow(() -> new BusinessException(ErrorCode.CATEGORY_NOT_FOUND));
+
+            res.add(BudgetSuggestRes.builder()
+                .category(CategoryRes.of(otherCategory))
+                .amount(remainingAmount)
+                .build());
+        }
+        return res;
+    }
+
+    private int roundToNearestThousand(double amount) {
+        return (int) (Math.round(amount / 1000.0) * 1000);
     }
 }
