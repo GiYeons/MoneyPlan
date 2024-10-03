@@ -2,22 +2,21 @@ package com.moneyplan.budget.dto;
 
 import com.moneyplan.budget.domain.Budget;
 import com.moneyplan.category.dto.CategoryRes;
-import com.moneyplan.member.dto.MemberRes;
 import java.time.LocalDate;
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 @Builder
-public class BudgetCreateRes {
+public class BudgetRes {
     private Long id;
     private CategoryRes category;
     private LocalDate startDate;
     private LocalDate endDate;
     private int amount;
 
-    public static BudgetCreateRes of(Budget budget) {
-        return BudgetCreateRes.builder()
+    public static BudgetRes of(Budget budget) {
+        return BudgetRes.builder()
             .id(budget.getId())
             .category(CategoryRes.of(budget.getCategory()))
             .startDate(budget.getStartDate())
