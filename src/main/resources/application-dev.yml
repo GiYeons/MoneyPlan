@@ -1,8 +1,6 @@
 spring:
-  config:
-    import: application-secret.properties
   datasource:
     url: ${RDS_URL}
     username: ${RDS_USERNAME}
     password: ${RDS_PASSWORD}
-    driver-class-name: org.mariadb.jdbc.Driver
+    driver-class-name: com.mysql.cj.jdbc.Driver
