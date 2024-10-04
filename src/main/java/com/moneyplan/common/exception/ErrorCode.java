@@ -28,6 +28,11 @@ public enum ErrorCode {
     MISSING_AUTHENTICATION(HttpStatus.UNAUTHORIZED, "인증 정보가 존재하지 않습니다."),
 
     /**
+     * 403 - Forbidden
+     */
+    FORBIDDEN_ACCESS(HttpStatus.FORBIDDEN, "접근 권한이 없습니다."),
+
+    /**
      * 404 - Not Found
      */
     MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 회원입니다."),
@@ -36,10 +41,9 @@ public enum ErrorCode {
     JWT_TOKEN_NOT_FOUND(HttpStatus.NOT_FOUND, "토큰을 찾을 수 없습니다."),
 
     /**
-     * 403 - Forbidden
+     * 409 - Conflict
      */
     ACCOUNT_CONFLICT(HttpStatus.CONFLICT, "이미 사용중인 계정입니다."),
-    FORBIDDEN_ACCESS(HttpStatus.CONFLICT, "접근 권한이 없습니다."),
 
     /**
      * 500 - Internal Server Error
