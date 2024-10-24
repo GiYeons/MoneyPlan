@@ -8,6 +8,8 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.moneyplan.common.auth.JwtService;
+import com.moneyplan.common.exception.BusinessException;
+import com.moneyplan.common.exception.ErrorCode;
 import com.moneyplan.member.domain.Member;
 import com.moneyplan.member.dto.MemberReq;
 import com.moneyplan.member.dto.MemberRes;
@@ -62,6 +64,22 @@ class MemberServiceTest {
         assertThat(memberRes.getId()).isEqualTo(member.getId());
         verify(memberRepository, times(1)).existsByAccount(any());
         verify(memberRepository, times(1)).save(any());
+    }
+
+    @Test
+    @DisplayName("회원가입: 중복된 계정명인 경우")
+    void register_whenAccountConflict() {
+        // given
+        when(memberRepository.existsByAccount(any())).thenReturn(true);
+
+        // when
+        BusinessException businessException = assertThrows(BusinessException.class,
+            () -> memberService.register(memberReq));
+
+        // then
+        assertThat(businessException.getErrorCode()).isEqualTo(ErrorCode.ACCOUNT_CONFLICT);
+        verify(memberRepository, times(1)).existsByAccount(any());
+        verify(memberRepository, times(0)).save(any());
     }
 
 
