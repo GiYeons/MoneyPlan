@@ -1,5 +1,5 @@
 INSERT IGNORE INTO member (id, account, password)
--- password1234@
+-- password1234@, password5678@
 VALUES
 (1, 'MoneyPlan', '$2a$10$mIyRde.YyDr8fvyaXpCJPO0Go.f7oG/8dsLngB9hTTA4imzajK6Q6'),
 (2, 'MoneyMap', '$2a$10$P9RH4WZ2JRe6miyoJjV1vuSIUh073yIgLDANukaUHq2sXuo8EOWzO');
